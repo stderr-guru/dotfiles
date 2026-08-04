@@ -7,9 +7,12 @@ Host *
 Host *
   IdentityAgent ~/.1password/agent.sock
 {{ end }}
+
+{{ if .github_key }}
 Host github.com
   HostName github.com
   User git
   IdentityFile ~/.ssh/{{ .github_key }}
   IdentitiesOnly yes
   AddKeysToAgent yes
+{{ end }}
