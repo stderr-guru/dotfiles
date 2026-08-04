@@ -1,0 +1,30 @@
+function edit-command() {
+  local tmp_file=$(mktemp)
+  echo "$BUFFER" >! "$tmp_file"
+
+  local -a buf_words
+  buf_words=( ${(z)BUFFER} )
+  local cmd_name="$buf_words[1]"
+  local man_pane=""
+
+  if [[ -n "$TMUX" && -n "$cmd_name" && ( "$EDITOR" == *vim* || "$EDITOR" == *nvim* ) ]]; then
+    local orig_pane=$(tmux display-message -p "#{pane_id}")
+    
+    local doc_cmd="tldr $cmd_name | bat -p --paging=always --language=help"
+    man -w "$cmd_name" &>/dev/null && doc_cmd="batman $cmd_name"
+
+    man_pane=$(tmux split-window -v -l 80% -P -F "#{pane_id}" "$doc_cmd")
+    tmux select-pane -t "$orig_pane"
+  fi
+
+  local -a edit_cmd
+  edit_cmd=( ${(z)EDITOR:-nano} ) # Defaults to nano if $EDITOR is empty
+  [[ "$EDITOR" == "code" ]] && edit_cmd+=( --wait )
+
+  "${(@Q)edit_cmd}" "$tmp_file" </dev/tty
+
+  [[ -n "$man_pane" ]] && tmux kill-pane -t "$man_pane" 2>/dev/null
+
+  BUFFER=$(cat "$tmp_file")
+  rm "$tmp_file"
+}

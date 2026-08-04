@@ -1,0 +1,12 @@
+getantidote/use-omz
+
+# Oh My Zsh Plugins
+ohmyzsh/ohmyzsh path:lib
+ohmyzsh/ohmyzsh path:plugins/1password
+ohmyzsh/ohmyzsh path:plugins/zoxide
+
+# romkatv/powerlevel10k Disabled when trying starship
+Aloxaf/fzf-tab
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-autosuggestions
+reegnz/jq-zsh-plugin

@@ -1,0 +1,55 @@
+{{- if eq .chezmoi.hostname "JordanLaptop" -}}
+export PATH="$PATH:/home/jordan/.local/bin"
+
+eval "$(ssh-agent -s)" > /dev/null
+ssh-add ~/.ssh/stderr-guru-github.pem 2>/dev/null
+{{ end }}
+# Plugins
+{{- $brew := lookPath "brew" -}}
+{{ if $brew }}
+source $HOMEBREW_PREFIX/opt/antidote/share/antidote/antidote.zsh
+{{- end }}
+antidote load ~/.config/zsh/plugins.txt
+
+autoload -Uz compinit && compinit
+autoload -Uz bashcompinit && bashcompinit
+
+# Load .zsh files
+for file in ~/.config/zsh/zsh.d/*.zsh; do
+  [ -r "$file" ] && source "$file"
+done
+
+# Load widgets
+fpath=(~/.config/zsh/widgets $fpath)
+autoload -Uz prepend-sudo edit-command
+
+zle -N prepend-sudo
+bindkey '\es' prepend-sudo
+
+zle -N edit-command
+bindkey 'vv' edit-command
+
+# Load functions
+for file in ~/.config/zsh/functions/.zsh; do
+  [ -r "$file" ] && source "$file"
+done
+
+# Init
+fpath=($HOMEBREW_PREFIX/share/zsh/site-functions $fpath)
+eval "$(zoxide init zsh)"
+eval "$(atuin init zsh)"
+source <(fzf --zsh)
+
+# Update tmux's internal environment with the current shell's SSH agent
+if [ -n "$TMUX" ]; then
+  tmux setenv SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
+fi
+
+# User Preferences
+export EDITOR=vim
+export FZF_DEFAULT_COMMAND="fd . $HOME"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+
+# Prompt
+eval "$(starship init zsh)"
