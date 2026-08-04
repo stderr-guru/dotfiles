@@ -34,8 +34,8 @@ done
 # Init
 fpath=($HOMEBREW_PREFIX/share/zsh/site-functions $fpath)
 eval "$(zoxide init zsh)"
-eval "$(atuin init zsh)"
 source <(fzf --zsh)
+eval "$(suv init zsh)"
 
 # Update tmux's internal environment with the current shell's SSH agent
 if [ -n "$TMUX" ]; then
