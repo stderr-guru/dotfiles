@@ -1,0 +1,22 @@
+theme = Gruvbox Dark
+
+# Font
+font-family = "JetBrains Mono"
+font-style = Bold
+font-style-bold = ExtraBold
+font-size = 18
+
+# Keybinds
+keybind = global:cmd+grave_accent=toggle_quick_terminal
+keybind = unconsumed:ctrl+tab=unbind
+keybind = unconsumed:super+c=copy_to_clipboard
+keybind = unconsumed:super+/=unbind
+
+# Options
+confirm-close-surface=false
+macos-option-as-alt = left
+term = xterm-256color
+
+command = ~/.config/ghostty/command.sh
+
+
