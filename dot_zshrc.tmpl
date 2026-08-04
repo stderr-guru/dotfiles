@@ -1,8 +1,5 @@
 {{- if eq .chezmoi.hostname "JordanLaptop" -}}
 export PATH="$PATH:/home/jordan/.local/bin"
-
-eval "$(ssh-agent -s)" > /dev/null
-ssh-add ~/.ssh/stderr-guru-github.pem 2>/dev/null
 {{ end }}
 # Plugins
 {{- $brew := lookPath "brew" -}}
@@ -42,7 +39,9 @@ source <(fzf --zsh)
 
 # Update tmux's internal environment with the current shell's SSH agent
 if [ -n "$TMUX" ]; then
-  tmux setenv SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
+  eval $(tmux show-environment -s SSH_AUTH_SOCK 2>/dev/null)
+else
+  tmux setenv SSH_AUTH_SOCK "$SSH_AUTH_SOCK" 2>/dev/null
 fi
 
 # User Preferences
