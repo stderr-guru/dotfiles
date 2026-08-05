@@ -27,7 +27,7 @@ zle -N edit-command
 bindkey 'vv' edit-command
 
 # Load functions
-for file in ~/.config/zsh/functions/.zsh; do
+for file in ~/.config/zsh/functions/*.zsh; do
   [ -r "$file" ] && source "$file"
 done
 
